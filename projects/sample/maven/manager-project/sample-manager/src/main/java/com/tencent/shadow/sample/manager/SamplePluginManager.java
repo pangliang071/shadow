@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 
 
 public class SamplePluginManager extends FastPluginManager {
-
+    private static final String TAG = "SamplePluginManager";
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private Context mCurrentContext;
@@ -51,7 +51,12 @@ public class SamplePluginManager extends FastPluginManager {
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, "sample-plugin");
             bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin.MainActivity");
             onStartActivity(context, bundle, callback);
-        } else if (fromId == Constant.FROM_ID_CALL_SERVICE) {
+        }else if (fromId == Constant.FROM_ID_START_ACTIVITY2) {
+            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, "/data/local/tmp/plugin2-debug.zip");
+            bundle.putString(Constant.KEY_PLUGIN_PART_KEY, "sample-plugin2");
+            bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin2.MainActivity");
+            onStartActivity(context, bundle, callback);
+        }else if (fromId == Constant.FROM_ID_CALL_SERVICE) {
             callPluginService(context);
         } else {
             throw new IllegalArgumentException("不认识的fromId==" + fromId);
@@ -62,6 +67,8 @@ public class SamplePluginManager extends FastPluginManager {
         final String pluginZipPath = bundle.getString(Constant.KEY_PLUGIN_ZIP_PATH);
         final String partKey = bundle.getString(Constant.KEY_PLUGIN_PART_KEY);
         final String className = bundle.getString(Constant.KEY_ACTIVITY_CLASSNAME);
+        Log.e(TAG, "onStartActivity: partKey:" + partKey);
+        Log.e(TAG, "onStartActivity: pluginZipPath:" + pluginZipPath);
         if (className == null) {
             throw new NullPointerException("className == null");
         }
@@ -86,9 +93,12 @@ public class SamplePluginManager extends FastPluginManager {
                     if (extras != null) {
                         pluginIntent.replaceExtras(extras);
                     }
-
+                    Log.e(TAG, "convertActivityIntent: 异常2"+installedPlugin);
+                    Log.e(TAG, "convertActivityIntent: 异常3"+partKey);
+                    Log.e(TAG, "convertActivityIntent: 异常4"+pluginIntent);
                     startPluginActivity(context, installedPlugin, partKey, pluginIntent);
                 } catch (Exception e) {
+                    Log.e(TAG, "onStartActivity: 異常");
                     throw new RuntimeException(e);
                 }
                 if (callback != null) {

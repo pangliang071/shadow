@@ -3,13 +3,18 @@
     package="com.tencent.shadow.sample.host">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:label="Shadow Sample Host"
-        android:name=".MyApplication"
         android:theme="@android:style/Theme.DeviceDefault">
+
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".SecondActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
